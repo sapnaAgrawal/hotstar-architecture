@@ -3,694 +3,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotstar System Design Architecture</title>
+    <title>🚀 Hotstar System Design Architecture</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            line-height: 1.6;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            line-height: 1.8;
         }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+        .nav-bar {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            padding: 30px;
+        .nav-item {
+            color: #93c5fd;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+        .nav-item:hover {
+            color: #3b82f6;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+            border-radius: 0.375rem;
         }
-
-        .header h1 {
-            font-size: 3em;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .section {
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            color: #1e293b;
         }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .diagram-section {
-            margin-bottom: 60px;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .diagram-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-        }
-
-        .section-title {
-            font-size: 2.2em;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #3498db;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .section-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .diagram-container {
-            margin: 30px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            border: 2px solid #e9ecef;
-        }
-
-        .explanation {
-            background: linear-gradient(135deg, #667eea20, #764ba220);
-            padding: 25px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border-left: 5px solid #3498db;
-        }
-
-        .explanation h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.4em;
-        }
-
-        .component {
-            display: inline-block;
-            padding: 12px 20px;
-            margin: 8px;
-            border-radius: 25px;
-            font-weight: bold;
-            text-align: center;
-            min-width: 120px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .component:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .client { background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; }
-        .load-balancer { background: linear-gradient(45deg, #4ecdc4, #44a08d); color: white; }
-        .app-server { background: linear-gradient(45deg, #45b7d1, #96ceb4); color: white; }
-        .database { background: linear-gradient(45deg, #f9ca24, #f0932b); color: white; }
-        .cdn { background: linear-gradient(45deg, #eb4d4b, #6c5ce7); color: white; }
-        .storage { background: linear-gradient(45deg, #a55eea, #26de81); color: white; }
-        .monitoring { background: linear-gradient(45deg, #fd79a8, #fdcb6e); color: white; }
-        .security { background: linear-gradient(45deg, #6c5ce7, #74b9ff); color: white; }
-
-        .flow-arrow {
-            display: inline-block;
-            font-size: 24px;
-            color: #3498db;
-            margin: 0 15px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .architecture-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .process-flow {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            margin: 30px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            border: 2px dashed #3498db;
-        }
-
-        .step {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px;
-            text-align: center;
-            min-width: 150px;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .step:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-        }
-
-        .step-number {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            background: #e74c3c;
-            color: white;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .real-world-example {
-            background: linear-gradient(135deg, #ff9a9e, #fecfef);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 2px solid #ff6b9d;
-        }
-
-        .real-world-example h4 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .metrics-box {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .metric {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
+        .flow-item {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
             text-align: center;
             transition: transform 0.3s ease;
         }
-
-        .metric:hover {
+        .flow-item:hover {
             transform: scale(1.05);
         }
-
-        .metric-value {
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 5px;
+        .arrow {
+            font-size: 2rem;
+            color: #3b82f6;
+            animation: pulse 1.5s infinite;
         }
-
-        .metric-label {
-            font-size: 0.9em;
-            opacity: 0.9;
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
-
-        .navigation {
-            position: fixed;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            z-index: 1000;
+        .header-img {
+            border-radius: 0.75rem;
+            width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+            object-fit: cover;
         }
-
-        .nav-item {
-            display: block;
-            padding: 8px 15px;
-            margin: 5px 0;
-            text-decoration: none;
-            color: #2c3e50;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-size: 0.9em;
+        .read-more {
+            color: #3b82f6;
+            text-decoration: underline;
+            transition: color 0.3s ease;
         }
-
-        .nav-item:hover {
-            background: #3498db;
-            color: white;
-            transform: translateX(5px);
+        .read-more:hover {
+            color: #1e40af;
         }
-
-        @media (max-width: 768px) {
-            .navigation {
-                display: none;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .section-title {
-                font-size: 1.8em;
-            }
-            
-            .process-flow {
-                flex-direction: column;
-            }
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .stat-item {
+            background: #dbeafe;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            text-align: center;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🚀 Hotstar System Design Architecture</h1>
-            <p>Comprehensive System Design with Real-World Implementation Examples</p>
+<body class="min-h-screen p-4">
+    <div class="container mx-auto">
+        <h1 class="text-4xl font-bold text-center text-white mb-6" data-aos="zoom-in">🚀 Hotstar System Design Architecture</h1>
+        <p class="text-center text-gray-300 mb-8" data-aos="fade-up">A Professional Blueprint for Scalable Streaming Infrastructure</p>
+
+        <nav class="nav-bar flex flex-wrap justify-center gap-4" data-aos="fade-up">
+            <a href="#architecture" class="nav-item flex items-center"><span class="mr-2">🏗️</span> Architecture</a>
+            <a href="#load-balancing" class="nav-item flex items-center"><span class="mr-2">⚖️</span> Load Balancing</a>
+            <a href="#database" class="nav-item flex items-center"><span class="mr-2">🗄️</span> Database</a>
+            <a href="#cdn" class="nav-item flex items-center"><span class="mr-2">🌐</span> CDN</a>
+            <a href="#video-encoding" class="nav-item flex items-center"><span class="mr-2">🎬</span> Video Encoding</a>
+            <a href="#hls-streaming" class="nav-item flex items-center"><span class="mr-2">📺</span> HLS Streaming</a>
+            <a href="#auto-scaling" class="nav-item flex items-center"><span class="mr-2">📈</span> Auto Scaling</a>
+            <a href="#security" class="nav-item flex items-center"><span class="mr-2">🔒</span> Security</a>
+            <a href="#cicd" class="nav-item flex items-center"><span class="mr-2">🔄</span> CI/CD</a>
+            <a href="#future-tech" class="nav-item flex items-center"><span class="mr-2">🔮</span> Future Tech</a>
+        </nav>
+
+        <div id="architecture" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">🏗️</span> High-Level System Architecture</h2>
+            <p class="text-sm text-gray-500 mb-4">System architecture diagram</p>
+            <img src="https://images.unsplash.com/photo-1620714223084-8fcacc6dfd0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="System architecture diagram" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A visual representation of a distributed system architecture with servers and networks)</p>
+            <p class="text-gray-700 mb-4">This section outlines the overall structure of Hotstar's infrastructure, detailing how client applications, load balancers, microservices, and data layers work together to deliver seamless streaming.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">📱 Mobile Apps<br>iOS/Android</div>
+                <div class="flow-item">💻 Web Browser<br>React/Angular</div>
+                <div class="flow-item">📺 Smart TV Apps<br>Android TV/Fire TV</div>
+            </div>
+            <div class="text-center arrow">⬇️</div>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">⚖️ Load Balancer<br>AWS ALB/Nginx</div>
+                <div class="flow-item">🛡️ WAF & DDoS<br>CloudFlare/AWS Shield</div>
+            </div>
+            <div class="text-center arrow">⬇️</div>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">🖥️ API Gateway<br>Spring Boot/Node.js</div>
+                <div class="flow-item">⚙️ Microservices<br>User/Content/Payment</div>
+                <div class="flow-item">🔍 Search Service<br>Elasticsearch</div>
+            </div>
+            <div class="text-center arrow">⬇️</div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="flow-item">🗄️ SQL Database<br>MySQL/PostgreSQL</div>
+                <div class="flow-item">📊 NoSQL Database<br>MongoDB/Cassandra</div>
+                <div class="flow-item">💾 Object Storage<br>AWS S3/GCS</div>
+                <div class="flow-item">🌐 CDN<br>CloudFront/Fastly</div>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-6 mb-3">🎯 Architecture Overview</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>Client Layer:</strong> Multiple client applications serve as entry points for users.</li>
+                <li><strong>Load Balancing Layer:</strong> Distributes requests to prevent overload.</li>
+                <li><strong>Application Layer:</strong> Manages core functionalities via microservices.</li>
+                <li><strong>Data Layer:</strong> Handles data storage and global content delivery.</li>
+            </ul>
+            <p class="mt-4"><a href="https://aws.amazon.com/architecture/" class="read-more">Read more on AWS Architecture</a></p>
+
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">During the IPL 2023 final, Hotstar’s architecture supported 25.3 million concurrent viewers, showcasing its ability to scale and deliver content across diverse devices.</p>
         </div>
 
-        <div class="navigation">
-            <a href="#architecture" class="nav-item">🏗️ Architecture</a>
-            <a href="#load-balancing" class="nav-item">⚖️ Load Balancing</a>
-            <a href="#database" class="nav-item">🗄️ Database</a>
-            <a href="#cdn" class="nav-item">🌐 CDN</a>
-            <a href="#video-encoding" class="nav-item">🎬 Video Encoding</a>
-            <a href="#hls-streaming" class="nav-item">📺 HLS Streaming</a>
-            <a href="#auto-scaling" class="nav-item">📈 Auto Scaling</a>
-            <a href="#security" class="nav-item">🔒 Security</a>
-            <a href="#cicd" class="nav-item">🔄 CI/CD</a>
-            <a href="#future" class="nav-item">🔮 Future Tech</a>
+        <div id="load-balancing" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">⚖️</span> Load Balancing & Traffic Distribution</h2>
+            <p class="text-sm text-gray-500 mb-4">Load balancing servers</p>
+            <img src="https://images.unsplash.com/photo-1516321310767-78f6a35d7f0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Load balancing servers" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A server room with load balancing equipment)</p>
+            <p class="text-gray-700 mb-4">This section explains how load balancers distribute traffic across servers to optimize performance and ensure high availability, using geographic distribution and health checks.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">1<br>User Request<br>Mobile/Web Client</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">2<br>DNS Resolution<br>Route53/CloudDNS</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">3<br>Layer 7 LB<br>AWS ALB/HAProxy</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">4<br>Health Check<br>Server Status</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">5<br>Route to Server<br>Weighted Distribution</div>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="flow-item">🖥️ App Server 1<br>Mumbai Region</div>
+                <div class="flow-item">🖥️ App Server 2<br>Delhi Region</div>
+                <div class="flow-item">🖥️ App Server 3<br>Bangalore Region</div>
+                <div class="flow-item">🖥️ App Server 4<br>Chennai Region</div>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-6 mb-3">⚡ Load Balancing Strategy</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>Geographic Distribution:</strong> Servers across regions reduce latency.</li>
+                <li><strong>Algorithm:</strong> Weighted round-robin with health checks.</li>
+                <li><strong>Session Affinity:</strong> Sticky sessions for authentication.</li>
+                <li><strong>Failover:</strong> Automatic switch to healthy servers in 30 seconds.</li>
+            </ul>
+            <p class="mt-4"><a href="https://aws.amazon.com/elasticloadbalancing/" class="read-more">Learn more on AWS Elastic Load Balancing</a></p>
+
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">During IPL 2023, load balancers managed 25.3 million concurrent users with 99.99% uptime, dynamically scaling across 50+ server instances.</p>
         </div>
 
-        <!-- High-Level Architecture -->
-        <div id="architecture" class="diagram-section">
-            <div class="section-title">
-                <div class="section-icon">🏗️</div>
-                High-Level System Architecture
+        <div id="database" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">🗄️</span> Database Architecture & Data Management</h2>
+            <p class="text-sm text-gray-500 mb-4">Database servers</p>
+            <img src="https://images.unsplash.com/photo-1551288049-bbfda4ea8e65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Database servers" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A data center with database racks)</p>
+            <p class="text-gray-700 mb-4">This section details the use of SQL and NoSQL databases to manage diverse data types, with replication and sharding for scalability and reliability.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">
+                    <strong>SQL Databases (ACID Compliance)</strong><br>
+                    👤 User Data<br>MySQL Master<br>
+                    💰 Transactions<br>PostgreSQL<br>
+                    📊 Analytics<br>MySQL Read Replicas
+                </div>
+                <div class="flow-item">
+                    <strong>NoSQL Databases (High Performance)</strong><br>
+                    🎬 Content Metadata<br>MongoDB<br>
+                    📺 User Sessions<br>Redis Cache<br>
+                    🔍 Search Index<br>Elasticsearch
+                </div>
             </div>
-            
-            <div class="diagram-container">
-                <div class="architecture-grid">
-                    <div class="component client">📱 Mobile Apps<br>iOS/Android</div>
-                    <div class="component client">💻 Web Browser<br>React/Angular</div>
-                    <div class="component client">📺 Smart TV Apps<br>Android TV/Fire TV</div>
-                </div>
-                
-                <div style="text-align: center; margin: 20px 0;">
-                    <span class="flow-arrow">⬇️</span>
-                </div>
-                
-                <div class="architecture-grid">
-                    <div class="component load-balancer">⚖️ Load Balancer<br>AWS ALB/Nginx</div>
-                    <div class="component security">🛡️ WAF & DDoS<br>CloudFlare/AWS Shield</div>
-                </div>
-                
-                <div style="text-align: center; margin: 20px 0;">
-                    <span class="flow-arrow">⬇️</span>
-                </div>
-                
-                <div class="architecture-grid">
-                    <div class="component app-server">🖥️ API Gateway<br>Spring Boot/Node.js</div>
-                    <div class="component app-server">⚙️ Microservices<br>User/Content/Payment</div>
-                    <div class="component app-server">🔍 Search Service<br>Elasticsearch</div>
-                </div>
-                
-                <div style="text-align: center; margin: 20px 0;">
-                    <span class="flow-arrow">⬇️</span>
-                </div>
-                
-                <div class="architecture-grid">
-                    <div class="component database">🗄️ SQL Database<br>MySQL/PostgreSQL</div>
-                    <div class="component database">📊 NoSQL Database<br>MongoDB/Cassandra</div>
-                    <div class="component storage">💾 Object Storage<br>AWS S3/GCS</div>
-                    <div class="component cdn">🌐 CDN<br>CloudFront/Fastly</div>
-                </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <h3 class="text-gray-800">Data Replication Strategy</h3>
+                <div class="flow-item">Master DB<br>Write Operations</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">Async Replication<br>Real-time Sync</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">Read Replicas<br>Multiple Regions</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">Load Distribution<br>Read Queries</div>
             </div>
 
-            <div class="explanation">
-                <h3>🎯 Architecture Overview</h3>
-                <p><strong>Client Layer:</strong> Multiple client applications (mobile, web, smart TV) serve as entry points for users to access Hotstar content.</p>
-                <p><strong>Load Balancing Layer:</strong> Distributes incoming requests across multiple servers to ensure optimal performance and prevent single points of failure.</p>
-                <p><strong>Application Layer:</strong> Microservices architecture handles different functionalities like user management, content delivery, search, and payments.</p>
-                <p><strong>Data Layer:</strong> Combination of SQL and NoSQL databases for different data types, with object storage for video content and CDN for global distribution.</p>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">💾 Database Strategy</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>SQL Usage:</strong> For structured data like user profiles.</li>
+                <li><strong>NoSQL Usage:</strong> For high-performance needs like metadata.</li>
+                <li><strong>Replication:</strong> Ensures 99.9% data availability.</li>
+                <li><strong>Sharding:</strong> Optimizes query performance by region.</li>
+            </ul>
+            <p class="mt-4"><a href="https://www.mongodb.com/basics/nosql" class="read-more">Explore NoSQL with MongoDB</a></p>
 
-            <div class="real-world-example">
-                <h4>🌟 Real-World Implementation</h4>
-                <p><strong>Scale:</strong> Hotstar handles 300+ million users with peak traffic during live sports events reaching 25+ million concurrent viewers during IPL matches. The system processes over 1 billion API calls daily across 9 countries.</p>
-            </div>
-
-            <div class="metrics-box">
-                <div class="metric">
-                    <div class="metric-value">300M+</div>
-                    <div class="metric-label">Monthly Active Users</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">25M+</div>
-                    <div class="metric-label">Peak Concurrent Users</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">1B+</div>
-                    <div class="metric-label">Daily API Calls</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">9</div>
-                    <div class="metric-label">Countries Served</div>
-                </div>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">Hotstar manages 100+ TB of user data with 5ms query response times, supporting 50+ million daily transactions during peak events.</p>
         </div>
 
-        <!-- Load Balancing -->
-        <div id="load-balancing" class="diagram-section">
-            <div class="section-title">
-                <div class="section-icon">⚖️</div>
-                Load Balancing & Traffic Distribution
+        <div id="cdn" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">🌐</span> Content Delivery Network (CDN)</h2>
+            <p class="text-sm text-gray-500 mb-4">CDN infrastructure</p>
+            <img src="https://images.unsplash.com/photo-1516321310767-78f6a35d7f0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="CDN infrastructure" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A global network of CDN edge servers)</p>
+            <p class="text-gray-700 mb-4">This section covers the CDN's role in caching content globally, reducing latency with edge computing and adaptive caching strategies.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">1<br>User Request<br>Video Content</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">2<br>Edge Server Check<br>Cache Hit/Miss</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">3<br>Origin Server<br>If Cache Miss</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">4<br>Content Delivery<br>Optimized Route</div>
             </div>
-            
-            <div class="diagram-container">
-                <div class="process-flow">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <strong>User Request</strong><br>
-                        Mobile/Web Client
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <strong>DNS Resolution</strong><br>
-                        Route53/CloudDNS
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <strong>Layer 7 LB</strong><br>
-                        AWS ALB/HAProxy
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <strong>Health Check</strong><br>
-                        Server Status
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">5</div>
-                        <strong>Route to Server</strong><br>
-                        Weighted Distribution
-                    </div>
-                </div>
-
-                <div class="architecture-grid" style="margin-top: 30px;">
-                    <div class="component app-server">🖥️ App Server 1<br>Mumbai Region</div>
-                    <div class="component app-server">🖥️ App Server 2<br>Delhi Region</div>
-                    <div class="component app-server">🖥️ App Server 3<br>Bangalore Region</div>
-                    <div class="component app-server">🖥️ App Server 4<br>Chennai Region</div>
-                </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <h3 class="text-gray-800">Global CDN Distribution</h3>
+                <div class="flow-item">🇮🇳 India<br>15 Edge Locations</div>
+                <div class="flow-item">🇺🇸 USA<br>8 Edge Locations</div>
+                <div class="flow-item">🇬🇧 UK<br>5 Edge Locations</div>
+                <div class="flow-item">🇸🇬 Singapore<br>6 Edge Locations</div>
+                <div class="flow-item">🇦🇺 Australia<br>4 Edge Locations</div>
+                <div class="flow-item">🇨🇦 Canada<br>3 Edge Locations</div>
             </div>
 
-            <div class="explanation">
-                <h3>⚡ Load Balancing Strategy</h3>
-                <p><strong>Geographic Distribution:</strong> Servers deployed across multiple regions in India and internationally to reduce latency.</p>
-                <p><strong>Algorithm:</strong> Weighted round-robin with real-time health checks, considering server capacity and current load.</p>
-                <p><strong>Session Affinity:</strong> Sticky sessions for user authentication while maintaining load distribution for content delivery.</p>
-                <p><strong>Failover:</strong> Automatic failover to healthy servers within 30 seconds of detecting server issues.</p>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">🚀 CDN Performance Optimization</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>Cache Strategy:</strong> 90% cache hit ratio with prefetching.</li>
+                <li><strong>Edge Computing:</strong> Transcoding at edge servers.</li>
+                <li><strong>Geographic Routing:</strong> Reduces latency by 60-80%.</li>
+                <li><strong>Adaptive Caching:</strong> Dynamic TTL based on popularity.</li>
+            </ul>
+            <p class="mt-4"><a href="https://www.cloudflare.com/learning/cdn/what-is-a-cdn/" class="read-more">Understand CDNs with Cloudflare</a></p>
 
-            <div class="real-world-example">
-                <h4>🏏 IPL 2023 Case Study</h4>
-                <p>During IPL 2023 final, Hotstar handled 25.3 million concurrent users with 99.99% uptime. Load balancers distributed traffic across 50+ server instances with automatic scaling triggered when CPU utilization exceeded 70%.</p>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">Hotstar’s CDN reduced video start times from 8 to 2 seconds globally, handling 50 Tbps during IPL 2023 peaks.</p>
         </div>
 
-        <!-- Database Architecture -->
-        <div id="database" class="diagram-section">
-            <div class="section-title">
-                <div class="section-icon">🗄️</div>
-                Database Architecture & Data Management
+        <div id="video-encoding" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">🎬</span> Video Encoding & Processing Pipeline</h2>
+            <p class="text-sm text-gray-500 mb-4">Video encoding pipeline</p>
+            <img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Video encoding pipeline" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A video processing workflow)</p>
+            <p class="text-gray-700 mb-4">This section describes the video encoding process, using AI-driven quality analysis and multi-format encoding to support various bitrates and devices.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">1<br>Video Upload<br>4K/HD Source</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">2<br>Quality Analysis<br>AI-powered QC</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">3<br>Multi-format Encoding<br>H.264/H.265/AV1</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">4<br>Bitrate Variants<br>240p to 4K</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">5<br>Storage & CDN<br>Global Distribution</div>
             </div>
-            
-            <div class="diagram-container">
-                <div class="architecture-grid">
-                    <div style="text-align: center;">
-                        <h4 style="color: #2c3e50; margin-bottom: 15px;">SQL Databases (ACID Compliance)</h4>
-                        <div class="component database">👤 User Data<br>MySQL Master</div>
-                        <div class="component database">💰 Transactions<br>PostgreSQL</div>
-                        <div class="component database">📊 Analytics<br>MySQL Read Replicas</div>
-                    </div>
-                    
-                    <div style="text-align: center;">
-                        <h4 style="color: #2c3e50; margin-bottom: 15px;">NoSQL Databases (High Performance)</h4>
-                        <div class="component database">🎬 Content Metadata<br>MongoDB</div>
-                        <div class="component database">📺 User Sessions<br>Redis Cache</div>
-                        <div class="component database">🔍 Search Index<br>Elasticsearch</div>
-                    </div>
-                </div>
-
-                <div style="margin: 30px 0; padding: 20px; background: #f1f2f6; border-radius: 15px;">
-                    <h4 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Data Replication Strategy</h4>
-                    <div class="process-flow">
-                        <div class="step">
-                            <strong>Master DB</strong><br>
-                            Write Operations
-                        </div>
-                        <span class="flow-arrow">➡️</span>
-                        <div class="step">
-                            <strong>Async Replication</strong><br>
-                            Real-time Sync
-                        </div>
-                        <span class="flow-arrow">➡️</span>
-                        <div class="step">
-                            <strong>Read Replicas</strong><br>
-                            Multiple Regions
-                        </div>
-                        <span class="flow-arrow">➡️</span>
-                        <div class="step">
-                            <strong>Load Distribution</strong><br>
-                            Read Queries
-                        </div>
-                    </div>
-                </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <h3 class="text-gray-800">Encoding Formats & Bitrates</h3>
+                <div class="flow-item">📱 Mobile<br>240p-720p<br>0.5-2 Mbps</div>
+                <div class="flow-item">💻 Desktop<br>480p-1080p<br>1-5 Mbps</div>
+                <div class="flow-item">📺 Smart TV<br>720p-4K<br>3-25 Mbps</div>
+                <div class="flow-item">🎮 Gaming<br>1080p-4K<br>5-50 Mbps</div>
             </div>
 
-            <div class="explanation">
-                <h3>💾 Database Strategy</h3>
-                <p><strong>SQL Usage:</strong> User profiles, payment transactions, and subscription data requiring ACID properties and complex relationships.</p>
-                <p><strong>NoSQL Usage:</strong> Content metadata, user session data, and real-time analytics requiring high performance and horizontal scaling.</p>
-                <p><strong>Replication:</strong> Master-slave replication with 3+ read replicas per region, ensuring 99.9% data availability.</p>
-                <p><strong>Sharding:</strong> User data sharded by geographic region and user ID ranges to optimize query performance.</p>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">🔧 Encoding Technology</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>Codec Strategy:</strong> H.264, H.265, and AV1 for efficiency.</li>
+                <li><strong>Adaptive Encoding:</strong> AI optimizes bitrate allocation.</li>
+                <li><strong>Processing Speed:</strong> Real-time encoding with 1000+ CPU cores.</li>
+                <li><strong>Quality Control:</strong> Automated VMAF scoring.</li>
+            </ul>
+            <p class="mt-4"><a href="https://www.wowza.com/blog/video-encoding" class="read-more">Dive into video encoding with Wowza</a></p>
 
-            <div class="real-world-example">
-                <h4>📈 Data Scale at Hotstar</h4>
-                <p>Hotstar manages 100+ TB of user data, 500+ TB of content metadata, and processes 50+ million database transactions daily. The system maintains 5ms average query response time with 99.95% availability.</p>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">Hotstar encoded IPL matches in real-time at 4K@60fps, delivering sub-10 second latency to 25+ million viewers.</p>
         </div>
 
-        <!-- CDN Architecture -->
-        <div id="cdn" class="diagram-section">
-            <div class="section-title">
-                <div class="section-icon">🌐</div>
-                Content Delivery Network (CDN)
+        <div id="hls-streaming" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">📺</span> HLS (HTTP Live Streaming) Implementation</h2>
+            <p class="text-sm text-gray-500 mb-4">Streaming interface</p>
+            <img src="https://images.unsplash.com/photo-1611162617210-7d673bf0f Crawl?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Streaming interface" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A streaming app interface)</p>
+            <p class="text-gray-700 mb-4">This section explains HLS, which segments videos into chunks and uses adaptive bitrate streaming for seamless playback across varying network conditions.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">1<br>Video Source<br>Encoded Content</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">2<br>Segmentation<br>6-second chunks</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">3<br>Manifest Creation<br>M3U8 Playlists</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">4<br>Adaptive Streaming<br>Bitrate Selection</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">5<br>Client Playback<br>Seamless Experience</div>
             </div>
-            
-            <div class="diagram-container">
-                <div class="process-flow">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <strong>User Request</strong><br>
-                        Video Content
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <strong>Edge Server Check</strong><br>
-                        Cache Hit/Miss
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <strong>Origin Server</strong><br>
-                        If Cache Miss
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <strong>Content Delivery</strong><br>
-                        Optimized Route
-                    </div>
-                </div>
-
-                <div style="margin: 30px 0;">
-                    <h4 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Global CDN Distribution</h4>
-                    <div class="architecture-grid">
-                        <div class="component cdn">🇮🇳 India<br>15 Edge Locations</div>
-                        <div class="component cdn">🇺🇸 USA<br>8 Edge Locations</div>
-                        <div class="component cdn">🇬🇧 UK<br>5 Edge Locations</div>
-                        <div class="component cdn">🇸🇬 Singapore<br>6 Edge Locations</div>
-                        <div class="component cdn">🇦🇺 Australia<br>4 Edge Locations</div>
-                        <div class="component cdn">🇨🇦 Canada<br>3 Edge Locations</div>
-                    </div>
-                </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <h3 class="text-gray-800">Adaptive Bitrate Logic</h3>
+                <div class="flow-item">Network Monitor<br>Bandwidth Detection</div>
+                <div class="arrow">⬇️</div>
+                <div class="flow-item">Buffer Analysis<br>Buffer Health Check</div>
+                <div class="arrow">⬇️</div>
+                <div class="flow-item">Bitrate Selection<br>Dynamic Adjustment</div>
+                <div class="arrow">⬇️</div>
+                <div class="flow-item">Seamless Playback<br>Quality Switching</div>
             </div>
 
-            <div class="explanation">
-                <h3>🚀 CDN Performance Optimization</h3>
-                <p><strong>Cache Strategy:</strong> 90% cache hit ratio with intelligent prefetching of popular content based on viewing patterns.</p>
-                <p><strong>Edge Computing:</strong> Video transcoding and image optimization performed at edge servers to reduce origin server load.</p>
-                <p><strong>Geographic Routing:</strong> Anycast routing directs users to the nearest edge server, reducing latency by 60-80%.</p>
-                <p><strong>Adaptive Caching:</strong> Dynamic TTL based on content popularity, with live sports cached for 30 seconds and movies for 24 hours.</p>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">📡 HLS Streaming Strategy</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>Segmentation:</strong> 6-second chunks for adaptability.</li>
+                <li><strong>Manifest Files:</strong> Dynamic M3U8 playlists.</li>
+                <li><strong>Adaptive Logic:</strong> Monitors bandwidth every 2 seconds.</li>
+                <li><strong>Fallback Mechanism:</strong> Seamless bitrate switching.</li>
+            </ul>
+            <p class="mt-4"><a href="https://developer.apple.com/streaming/" class="read-more">Learn about HLS with Apple Developer</a></p>
 
-            <div class="real-world-example">
-                <h4>⚡ Performance Metrics</h4>
-                <p>Hotstar's CDN reduces video start time from 8 seconds to 2 seconds globally. During peak events, the CDN serves 95% of requests from edge cache, handling 50 Tbps of traffic with 99.99% availability.</p>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">Hotstar’s HLS supported 25+ million concurrent streams during IPL 2023 with sub-3-second buffer times.</p>
         </div>
 
-        <!-- Video Encoding -->
-        <div id="video-encoding" class="diagram-section">
-            <div class="section-title">
-                <div class="section-icon">🎬</div>
-                Video Encoding & Processing Pipeline
-            </div>
-            
-            <div class="diagram-container">
-                <div class="process-flow">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <strong>Video Upload</strong><br>
-                        4K/HD Source
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <strong>Quality Analysis</strong><br>
-                        AI-powered QC
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <strong>Multi-format Encoding</strong><br>
-                        H.264/H.265/AV1
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <strong>Bitrate Variants</strong><br>
-                        240p to 4K
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">5</div>
-                        <strong>Storage & CDN</strong><br>
-                        Global Distribution
-                    </div>
-                </div>
-
-                <div style="margin: 30px 0;">
-                    <h4 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Encoding Formats & Bitrates</h4>
-                    <div class="architecture-grid">
-                        <div class="component storage">📱 Mobile<br>240p-720p<br>0.5-2 Mbps</div>
-                        <div class="component storage">💻 Desktop<br>480p-1080p<br>1-5 Mbps</div>
-                        <div class="component storage">📺 Smart TV<br>720p-4K<br>3-25 Mbps</div>
-                        <div class="component storage">🎮 Gaming<br>1080p-4K<br>5-50 Mbps</div>
-                    </div>
-                </div>
+        <div id="auto-scaling" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">📈</span> Auto Scaling & Resource Management</h2>
+            <p class="text-sm text-gray-500 mb-4">Auto-scaling servers</p>
+            <img src="https://images.unsplash.com/photo-1516321310767-78f6a35d7f0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Auto-scaling servers" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A scalable server infrastructure)</p>
+            <p class="text-gray-700 mb-4">This section covers auto-scaling, using Kubernetes and predictive models to adjust resources based on traffic spikes.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">1<br>Traffic Spike<br>Live Event</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">2<br>Metric Monitoring<br>CPU/Memory</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">3<br>Scaling Trigger<br>Threshold Breach</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">4<br>Instance Provisioning<br>AWS EC2/K8s</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">5<br>Load Distribution<br>Updated Routing</div>
             </div>
 
-            <div class="explanation">
-                <h3>🔧 Encoding Technology</h3>
-                <p><strong>Codec Strategy:</strong> H.264 for compatibility, H.265 for efficiency (40% size reduction), and AV1 for next-gen streaming.</p>
-                <p><strong>Adaptive Encoding:</strong> AI-driven per-title encoding optimizes bitrate allocation based on content complexity.</p>
-                <p><strong>Processing Speed:</strong> Parallel processing across 1000+ CPU cores enables real-time encoding for live events.</p>
-                <p><strong>Quality Control:</strong> Automated VMAF scoring ensures consistent quality across all bitrate variants.</p>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">🚀 Auto Scaling Strategy</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>Horizontal Scaling:</strong> Adds instances based on CPU usage.</li>
+                <li><strong>Predictive Scaling:</strong> Pre-provisions for events.</li>
+                <li><strong>Multi-Region Failover:</strong> Redirects to secondary regions.</li>
+                <li><strong>Cost Optimization:</strong> Uses spot instances.</li>
+            </ul>
+            <p class="mt-4"><a href="https://aws.amazon.com/autoscaling/" class="read-more">Explore AWS Auto Scaling</a></p>
 
-            <div class="real-world-example">
-                <h4>🏏 Live Sports Encoding</h4>
-                <p>During IPL matches, Hotstar encodes live video in real-time across 12 quality levels simultaneously. The system processes 4K@60fps input and delivers sub-10 second latency to 25+ million concurrent viewers.</p>
-            </div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">Hotstar scaled from 50 to 200 instances in 5 minutes during IPL 2023, maintaining <1-second API response times.</p>
         </div>
 
-        <!-- HLS Streaming -->
-        <div id="hls-streaming" class="diagram-section">
-            <div class="section-title">
-                <div class="section-icon">📺</div>
-                HLS (HTTP Live Streaming) Implementation
+        <div id="security" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">🔒</span> Security & Compliance</h2>
+            <p class="text-sm text-gray-500 mb-4">Cybersecurity setup</p>
+            <img src="https://images.unsplash.com/photo-1563986768494-4dee2763c55a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Cybersecurity setup" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A cybersecurity control room)</p>
+            <p class="text-gray-700 mb-4">This section details security measures like authentication, encryption, DRM, and threat detection to protect user data and content.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">1<br>User Authentication<br>JWT/OAuth</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">2<br>Data Encryption<br>TLS 1.3/AES-256</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">3<br>DRM Protection<br>Widevine/FairPlay</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">4<br>Threat Detection<br>WAF/AWS Shield</div>
             </div>
-            
-            <div class="diagram-container">
-                <div class="process-flow">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <strong>Video Source</strong><br>
-                        Encoded Content
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <strong>Segmentation</strong><br>
-                        6-second chunks
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <strong>Manifest Creation</strong><br>
-                        M3U8 Playlists
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <strong>Adaptive Streaming</strong><br>
-                        Bitrate Selection
-                    </div>
-                    <span class="flow-arrow">➡️</span>
-                    <div class="step">
-                        <div class="step-number">5</div>
-                        <strong>Client Playback</strong><br>
-                        Seamless Experience
-                    </div>
-                </div>
 
-                <div style="margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 15px;">
-                    <h4 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Adaptive Bitrate Logic</h4>
-                    <div class="process-flow">
-                        <div class="step">
-                            <strong>Network Monitor</strong><br>
-                            Bandwidth Detection
-                        </div>
-                        <span class="flow-arrow">⬇️</span>
-                        <div class="step">
-                            <strong>Buffer Analysis</strong>
-</div>
-</div>
-</div>
+            <h3 class="text-xl font-semibold mt-6 mb-3">🛡️ Security Strategy</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>Authentication:</strong> Secure login with token refresh.</li>
+                <li><strong>Encryption:</strong> End-to-end data security.</li>
+                <li><strong>DRM:</strong> Protects video content.</li>
+                <li><strong>Threat Mitigation:</strong> Blocks 99.9% of malicious traffic.</li>
+            </ul>
+            <p class="mt-4"><a href="https://aws.amazon.com/shield/" class="read-more">Learn about AWS Shield</a></p>
+
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">Hotstar blocked 10,000+ daily malicious requests in 2023, maintaining 99.99% uptime during DDoS attacks.</p>
+        </div>
+
+        <div id="cicd" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">🔄</span> CI/CD Pipeline</h2>
+            <p class="text-sm text-gray-500 mb-4">CI/CD pipeline</p>
+            <img src="https://images.unsplash.com/photo-1516321310767-78f6a35d7f0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="CI/CD pipeline" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A development pipeline workflow)</p>
+            <p class="text-gray-700 mb-4">This section describes the CI/CD pipeline for continuous integration and deployment, ensuring rapid and reliable updates.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <div class="flow-item">1<br>Code Commit<br>GitHub</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">2<br>Build & Test<br>Jenkins/CircleCI</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">3<br>Containerization<br>Docker</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">4<br>Deployment<br>Kubernetes</div>
+                <div class="arrow">➡️</div>
+                <div class="flow-item">5<br>Monitoring<br>Prometheus/Grafana</div>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-6 mb-3">⚙️ CI/CD Strategy</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>Continuous Integration:</strong> Automates builds with 95% test coverage.</li>
+                <li><strong>Continuous Deployment:</strong> Zero-downtime updates.</li>
+                <li><strong>Monitoring & Rollback:</strong> Real-time monitoring with rollback.</li>
+                <li><strong>Release Frequency:</strong> Daily for non-critical services.</li>
+            </ul>
+            <p class="mt-4"><a href="https://www.jenkins.io/doc/book/pipeline/" class="read-more">Explore CI/CD with Jenkins</a></p>
+
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">Hotstar achieved 99.9% deployment success with 10-minute average deployment times during IPL 2023 updates.</p>
+        </div>
+
+        <div id="future-tech" class="section" data-aos="fade-up">
+            <h2 class="flex items-center"><span class="text-2xl mr-2">🔮</span> Future Tech & Innovations</h2>
+            <p class="text-sm text-gray-500 mb-4">Future tech innovation</p>
+            <img src="https://images.unsplash.com/photo-1516321310767-78f6a35d7f0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Future tech innovation" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-sm text-gray-500 hidden" style="display:none;">Image by Unsplash (Failed to load - description: A futuristic tech setup)</p>
+            <p class="text-gray-700 mb-4">This section explores future technologies like AI personalization and 5G integration to enhance user experience and scalability.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="flow-item">AI Personalization<br>Recommendation Engine</div>
+                <div class="flow-item">WebRTC Streaming<br>Low-Latency Live</div>
+                <div class="flow-item">Edge AI<br>Real-time Analytics</div>
+                <div class="flow-item">5G Integration<br>Enhanced Mobile Streaming</div>
+            </div>
+
+            <h3 class="text-xl font-semibold mt-6 mb-3">🚀 Future Roadmap</h3>
+            <ul class="list-disc pl-6 text-gray-700">
+                <li><strong>AI Personalization:</strong> Boosts engagement by 20%.</li>
+                <li><strong>WebRTC:</strong> Targets sub-2-second latency.</li>
+                <li><strong>Edge AI:</strong> Enables dynamic ad insertion.</li>
+                <li><strong>5G Integration:</strong> Reduces buffering by 50%.</li>
+            </ul>
+            <p class="mt-4"><a href="https://webrtc.org/" class="read-more">Discover WebRTC for low-latency streaming</a></p>
+
+            <h3 class="text-xl font-semibold mt-6 mb-3">🌟 Real-Life Example</h3>
+            <p class="text-gray-700">Hotstar plans to support 50 million concurrent users by 2026 using 5G and AI, building on IPL 2023 success.</p>
+        </div>
+
+        <footer class="text-center text-gray-400 mt-12">
+            <p>Designed for scalability and performance | Hotstar System Design © 2025</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true
+        });
+    </script>
+</body>
+</html>
