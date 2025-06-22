@@ -294,70 +294,70 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>?? Hotstar System Design Architecture</h1>
+            <h1>🚀 Hotstar System Design Architecture</h1>
             <p>Comprehensive System Design with Real-World Implementation Examples</p>
         </div>
 
         <div class="navigation">
-            <a href="#architecture" class="nav-item">??? Architecture</a>
-            <a href="#load-balancing" class="nav-item">?? Load Balancing</a>
-            <a href="#database" class="nav-item">??? Database</a>
-            <a href="#cdn" class="nav-item">?? CDN</a>
-            <a href="#video-encoding" class="nav-item">?? Video Encoding</a>
-            <a href="#hls-streaming" class="nav-item">?? HLS Streaming</a>
-            <a href="#auto-scaling" class="nav-item">?? Auto Scaling</a>
-            <a href="#security" class="nav-item">?? Security</a>
-            <a href="#cicd" class="nav-item">?? CI/CD</a>
-            <a href="#future" class="nav-item">?? Future Tech</a>
+            <a href="#architecture" class="nav-item">🏗️ Architecture</a>
+            <a href="#load-balancing" class="nav-item">⚖️ Load Balancing</a>
+            <a href="#database" class="nav-item">🗄️ Database</a>
+            <a href="#cdn" class="nav-item">🌐 CDN</a>
+            <a href="#video-encoding" class="nav-item">🎬 Video Encoding</a>
+            <a href="#hls-streaming" class="nav-item">📺 HLS Streaming</a>
+            <a href="#auto-scaling" class="nav-item">📈 Auto Scaling</a>
+            <a href="#security" class="nav-item">🔒 Security</a>
+            <a href="#cicd" class="nav-item">🔄 CI/CD</a>
+            <a href="#future" class="nav-item">🔮 Future Tech</a>
         </div>
 
         <!-- High-Level Architecture -->
         <div id="architecture" class="diagram-section">
             <div class="section-title">
-                <div class="section-icon">???</div>
+                <div class="section-icon">🏗️</div>
                 High-Level System Architecture
             </div>
             
             <div class="diagram-container">
                 <div class="architecture-grid">
-                    <div class="component client">?? Mobile Apps<br>iOS/Android</div>
-                    <div class="component client">?? Web Browser<br>React/Angular</div>
-                    <div class="component client">?? Smart TV Apps<br>Android TV/Fire TV</div>
+                    <div class="component client">📱 Mobile Apps<br>iOS/Android</div>
+                    <div class="component client">💻 Web Browser<br>React/Angular</div>
+                    <div class="component client">📺 Smart TV Apps<br>Android TV/Fire TV</div>
                 </div>
                 
                 <div style="text-align: center; margin: 20px 0;">
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">⬇️</span>
                 </div>
                 
                 <div class="architecture-grid">
-                    <div class="component load-balancer">?? Load Balancer<br>AWS ALB/Nginx</div>
-                    <div class="component security">??? WAF & DDoS<br>CloudFlare/AWS Shield</div>
+                    <div class="component load-balancer">⚖️ Load Balancer<br>AWS ALB/Nginx</div>
+                    <div class="component security">🛡️ WAF & DDoS<br>CloudFlare/AWS Shield</div>
                 </div>
                 
                 <div style="text-align: center; margin: 20px 0;">
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">⬇️</span>
                 </div>
                 
                 <div class="architecture-grid">
-                    <div class="component app-server">??? API Gateway<br>Spring Boot/Node.js</div>
-                    <div class="component app-server">?? Microservices<br>User/Content/Payment</div>
-                    <div class="component app-server">?? Search Service<br>Elasticsearch</div>
+                    <div class="component app-server">🖥️ API Gateway<br>Spring Boot/Node.js</div>
+                    <div class="component app-server">⚙️ Microservices<br>User/Content/Payment</div>
+                    <div class="component app-server">🔍 Search Service<br>Elasticsearch</div>
                 </div>
                 
                 <div style="text-align: center; margin: 20px 0;">
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">⬇️</span>
                 </div>
                 
                 <div class="architecture-grid">
-                    <div class="component database">??? SQL Database<br>MySQL/PostgreSQL</div>
-                    <div class="component database">?? NoSQL Database<br>MongoDB/Cassandra</div>
-                    <div class="component storage">?? Object Storage<br>AWS S3/GCS</div>
-                    <div class="component cdn">?? CDN<br>CloudFront/Fastly</div>
+                    <div class="component database">🗄️ SQL Database<br>MySQL/PostgreSQL</div>
+                    <div class="component database">📊 NoSQL Database<br>MongoDB/Cassandra</div>
+                    <div class="component storage">💾 Object Storage<br>AWS S3/GCS</div>
+                    <div class="component cdn">🌐 CDN<br>CloudFront/Fastly</div>
                 </div>
             </div>
 
             <div class="explanation">
-                <h3>?? Architecture Overview</h3>
+                <h3>🎯 Architecture Overview</h3>
                 <p><strong>Client Layer:</strong> Multiple client applications (mobile, web, smart TV) serve as entry points for users to access Hotstar content.</p>
                 <p><strong>Load Balancing Layer:</strong> Distributes incoming requests across multiple servers to ensure optimal performance and prevent single points of failure.</p>
                 <p><strong>Application Layer:</strong> Microservices architecture handles different functionalities like user management, content delivery, search, and payments.</p>
@@ -365,7 +365,7 @@
             </div>
 
             <div class="real-world-example">
-                <h4>?? Real-World Implementation</h4>
+                <h4>🌟 Real-World Implementation</h4>
                 <p><strong>Scale:</strong> Hotstar handles 300+ million users with peak traffic during live sports events reaching 25+ million concurrent viewers during IPL matches. The system processes over 1 billion API calls daily across 9 countries.</p>
             </div>
 
@@ -392,7 +392,7 @@
         <!-- Load Balancing -->
         <div id="load-balancing" class="diagram-section">
             <div class="section-title">
-                <div class="section-icon">??</div>
+                <div class="section-icon">⚖️</div>
                 Load Balancing & Traffic Distribution
             </div>
             
@@ -403,25 +403,25 @@
                         <strong>User Request</strong><br>
                         Mobile/Web Client
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">2</div>
                         <strong>DNS Resolution</strong><br>
                         Route53/CloudDNS
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">3</div>
                         <strong>Layer 7 LB</strong><br>
                         AWS ALB/HAProxy
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">4</div>
                         <strong>Health Check</strong><br>
                         Server Status
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">5</div>
                         <strong>Route to Server</strong><br>
@@ -430,15 +430,15 @@
                 </div>
 
                 <div class="architecture-grid" style="margin-top: 30px;">
-                    <div class="component app-server">??? App Server 1<br>Mumbai Region</div>
-                    <div class="component app-server">??? App Server 2<br>Delhi Region</div>
-                    <div class="component app-server">??? App Server 3<br>Bangalore Region</div>
-                    <div class="component app-server">??? App Server 4<br>Chennai Region</div>
+                    <div class="component app-server">🖥️ App Server 1<br>Mumbai Region</div>
+                    <div class="component app-server">🖥️ App Server 2<br>Delhi Region</div>
+                    <div class="component app-server">🖥️ App Server 3<br>Bangalore Region</div>
+                    <div class="component app-server">🖥️ App Server 4<br>Chennai Region</div>
                 </div>
             </div>
 
             <div class="explanation">
-                <h3>? Load Balancing Strategy</h3>
+                <h3>⚡ Load Balancing Strategy</h3>
                 <p><strong>Geographic Distribution:</strong> Servers deployed across multiple regions in India and internationally to reduce latency.</p>
                 <p><strong>Algorithm:</strong> Weighted round-robin with real-time health checks, considering server capacity and current load.</p>
                 <p><strong>Session Affinity:</strong> Sticky sessions for user authentication while maintaining load distribution for content delivery.</p>
@@ -446,7 +446,7 @@
             </div>
 
             <div class="real-world-example">
-                <h4>?? IPL 2023 Case Study</h4>
+                <h4>🏏 IPL 2023 Case Study</h4>
                 <p>During IPL 2023 final, Hotstar handled 25.3 million concurrent users with 99.99% uptime. Load balancers distributed traffic across 50+ server instances with automatic scaling triggered when CPU utilization exceeded 70%.</p>
             </div>
         </div>
@@ -454,7 +454,7 @@
         <!-- Database Architecture -->
         <div id="database" class="diagram-section">
             <div class="section-title">
-                <div class="section-icon">???</div>
+                <div class="section-icon">🗄️</div>
                 Database Architecture & Data Management
             </div>
             
@@ -462,16 +462,16 @@
                 <div class="architecture-grid">
                     <div style="text-align: center;">
                         <h4 style="color: #2c3e50; margin-bottom: 15px;">SQL Databases (ACID Compliance)</h4>
-                        <div class="component database">?? User Data<br>MySQL Master</div>
-                        <div class="component database">?? Transactions<br>PostgreSQL</div>
-                        <div class="component database">?? Analytics<br>MySQL Read Replicas</div>
+                        <div class="component database">👤 User Data<br>MySQL Master</div>
+                        <div class="component database">💰 Transactions<br>PostgreSQL</div>
+                        <div class="component database">📊 Analytics<br>MySQL Read Replicas</div>
                     </div>
                     
                     <div style="text-align: center;">
                         <h4 style="color: #2c3e50; margin-bottom: 15px;">NoSQL Databases (High Performance)</h4>
-                        <div class="component database">?? Content Metadata<br>MongoDB</div>
-                        <div class="component database">?? User Sessions<br>Redis Cache</div>
-                        <div class="component database">?? Search Index<br>Elasticsearch</div>
+                        <div class="component database">🎬 Content Metadata<br>MongoDB</div>
+                        <div class="component database">📺 User Sessions<br>Redis Cache</div>
+                        <div class="component database">🔍 Search Index<br>Elasticsearch</div>
                     </div>
                 </div>
 
@@ -482,17 +482,17 @@
                             <strong>Master DB</strong><br>
                             Write Operations
                         </div>
-                        <span class="flow-arrow">??</span>
+                        <span class="flow-arrow">➡️</span>
                         <div class="step">
                             <strong>Async Replication</strong><br>
                             Real-time Sync
                         </div>
-                        <span class="flow-arrow">??</span>
+                        <span class="flow-arrow">➡️</span>
                         <div class="step">
                             <strong>Read Replicas</strong><br>
                             Multiple Regions
                         </div>
-                        <span class="flow-arrow">??</span>
+                        <span class="flow-arrow">➡️</span>
                         <div class="step">
                             <strong>Load Distribution</strong><br>
                             Read Queries
@@ -502,7 +502,7 @@
             </div>
 
             <div class="explanation">
-                <h3>?? Database Strategy</h3>
+                <h3>💾 Database Strategy</h3>
                 <p><strong>SQL Usage:</strong> User profiles, payment transactions, and subscription data requiring ACID properties and complex relationships.</p>
                 <p><strong>NoSQL Usage:</strong> Content metadata, user session data, and real-time analytics requiring high performance and horizontal scaling.</p>
                 <p><strong>Replication:</strong> Master-slave replication with 3+ read replicas per region, ensuring 99.9% data availability.</p>
@@ -510,7 +510,7 @@
             </div>
 
             <div class="real-world-example">
-                <h4>?? Data Scale at Hotstar</h4>
+                <h4>📈 Data Scale at Hotstar</h4>
                 <p>Hotstar manages 100+ TB of user data, 500+ TB of content metadata, and processes 50+ million database transactions daily. The system maintains 5ms average query response time with 99.95% availability.</p>
             </div>
         </div>
@@ -518,7 +518,7 @@
         <!-- CDN Architecture -->
         <div id="cdn" class="diagram-section">
             <div class="section-title">
-                <div class="section-icon">??</div>
+                <div class="section-icon">🌐</div>
                 Content Delivery Network (CDN)
             </div>
             
@@ -529,19 +529,19 @@
                         <strong>User Request</strong><br>
                         Video Content
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">2</div>
                         <strong>Edge Server Check</strong><br>
                         Cache Hit/Miss
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">3</div>
                         <strong>Origin Server</strong><br>
                         If Cache Miss
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">4</div>
                         <strong>Content Delivery</strong><br>
@@ -552,18 +552,18 @@
                 <div style="margin: 30px 0;">
                     <h4 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Global CDN Distribution</h4>
                     <div class="architecture-grid">
-                        <div class="component cdn">???? India<br>15 Edge Locations</div>
-                        <div class="component cdn">???? USA<br>8 Edge Locations</div>
-                        <div class="component cdn">???? UK<br>5 Edge Locations</div>
-                        <div class="component cdn">???? Singapore<br>6 Edge Locations</div>
-                        <div class="component cdn">???? Australia<br>4 Edge Locations</div>
-                        <div class="component cdn">???? Canada<br>3 Edge Locations</div>
+                        <div class="component cdn">🇮🇳 India<br>15 Edge Locations</div>
+                        <div class="component cdn">🇺🇸 USA<br>8 Edge Locations</div>
+                        <div class="component cdn">🇬🇧 UK<br>5 Edge Locations</div>
+                        <div class="component cdn">🇸🇬 Singapore<br>6 Edge Locations</div>
+                        <div class="component cdn">🇦🇺 Australia<br>4 Edge Locations</div>
+                        <div class="component cdn">🇨🇦 Canada<br>3 Edge Locations</div>
                     </div>
                 </div>
             </div>
 
             <div class="explanation">
-                <h3>?? CDN Performance Optimization</h3>
+                <h3>🚀 CDN Performance Optimization</h3>
                 <p><strong>Cache Strategy:</strong> 90% cache hit ratio with intelligent prefetching of popular content based on viewing patterns.</p>
                 <p><strong>Edge Computing:</strong> Video transcoding and image optimization performed at edge servers to reduce origin server load.</p>
                 <p><strong>Geographic Routing:</strong> Anycast routing directs users to the nearest edge server, reducing latency by 60-80%.</p>
@@ -571,7 +571,7 @@
             </div>
 
             <div class="real-world-example">
-                <h4>? Performance Metrics</h4>
+                <h4>⚡ Performance Metrics</h4>
                 <p>Hotstar's CDN reduces video start time from 8 seconds to 2 seconds globally. During peak events, the CDN serves 95% of requests from edge cache, handling 50 Tbps of traffic with 99.99% availability.</p>
             </div>
         </div>
@@ -579,7 +579,7 @@
         <!-- Video Encoding -->
         <div id="video-encoding" class="diagram-section">
             <div class="section-title">
-                <div class="section-icon">??</div>
+                <div class="section-icon">🎬</div>
                 Video Encoding & Processing Pipeline
             </div>
             
@@ -590,25 +590,25 @@
                         <strong>Video Upload</strong><br>
                         4K/HD Source
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">2</div>
                         <strong>Quality Analysis</strong><br>
                         AI-powered QC
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">3</div>
                         <strong>Multi-format Encoding</strong><br>
                         H.264/H.265/AV1
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">4</div>
                         <strong>Bitrate Variants</strong><br>
                         240p to 4K
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">5</div>
                         <strong>Storage & CDN</strong><br>
@@ -619,16 +619,16 @@
                 <div style="margin: 30px 0;">
                     <h4 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Encoding Formats & Bitrates</h4>
                     <div class="architecture-grid">
-                        <div class="component storage">?? Mobile<br>240p-720p<br>0.5-2 Mbps</div>
-                        <div class="component storage">?? Desktop<br>480p-1080p<br>1-5 Mbps</div>
-                        <div class="component storage">?? Smart TV<br>720p-4K<br>3-25 Mbps</div>
-                        <div class="component storage">?? Gaming<br>1080p-4K<br>5-50 Mbps</div>
+                        <div class="component storage">📱 Mobile<br>240p-720p<br>0.5-2 Mbps</div>
+                        <div class="component storage">💻 Desktop<br>480p-1080p<br>1-5 Mbps</div>
+                        <div class="component storage">📺 Smart TV<br>720p-4K<br>3-25 Mbps</div>
+                        <div class="component storage">🎮 Gaming<br>1080p-4K<br>5-50 Mbps</div>
                     </div>
                 </div>
             </div>
 
             <div class="explanation">
-                <h3>?? Encoding Technology</h3>
+                <h3>🔧 Encoding Technology</h3>
                 <p><strong>Codec Strategy:</strong> H.264 for compatibility, H.265 for efficiency (40% size reduction), and AV1 for next-gen streaming.</p>
                 <p><strong>Adaptive Encoding:</strong> AI-driven per-title encoding optimizes bitrate allocation based on content complexity.</p>
                 <p><strong>Processing Speed:</strong> Parallel processing across 1000+ CPU cores enables real-time encoding for live events.</p>
@@ -636,7 +636,7 @@
             </div>
 
             <div class="real-world-example">
-                <h4>?? Live Sports Encoding</h4>
+                <h4>🏏 Live Sports Encoding</h4>
                 <p>During IPL matches, Hotstar encodes live video in real-time across 12 quality levels simultaneously. The system processes 4K@60fps input and delivers sub-10 second latency to 25+ million concurrent viewers.</p>
             </div>
         </div>
@@ -644,7 +644,7 @@
         <!-- HLS Streaming -->
         <div id="hls-streaming" class="diagram-section">
             <div class="section-title">
-                <div class="section-icon">??</div>
+                <div class="section-icon">📺</div>
                 HLS (HTTP Live Streaming) Implementation
             </div>
             
@@ -655,25 +655,25 @@
                         <strong>Video Source</strong><br>
                         Encoded Content
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">2</div>
                         <strong>Segmentation</strong><br>
                         6-second chunks
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">3</div>
                         <strong>Manifest Creation</strong><br>
                         M3U8 Playlists
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">4</div>
                         <strong>Adaptive Streaming</strong><br>
                         Bitrate Selection
                     </div>
-                    <span class="flow-arrow">??</span>
+                    <span class="flow-arrow">➡️</span>
                     <div class="step">
                         <div class="step-number">5</div>
                         <strong>Client Playback</strong><br>
@@ -688,6 +688,9 @@
                             <strong>Network Monitor</strong><br>
                             Bandwidth Detection
                         </div>
-                        <span class="flow-arrow">??</span>
+                        <span class="flow-arrow">⬇️</span>
                         <div class="step">
-                            <strong>Buffer Analysis
+                            <strong>Buffer Analysis</strong>
+</div>
+</div>
+</div>
